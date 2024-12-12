@@ -38,13 +38,13 @@ public class UserResponse {
     public record Login(
             String email,
             String nickname,
-            String token
+            String accessToken
     ) {
-        public static Login from(User user,String token) {
+        public static Login from(User user,String accessToken) {
             return new Login(
                     user.getEmail(),
                     user.getNickname(),
-                    token
+                    accessToken
             );
         }
     }

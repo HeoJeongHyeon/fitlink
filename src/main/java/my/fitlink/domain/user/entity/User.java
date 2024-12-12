@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import my.fitlink.domain.user.dto.request.UserRequest;
 import my.fitlink.global.entity.BaseTime;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -43,7 +45,9 @@ public class User extends BaseTime {
                 request.password());
     }
 
-
+    public static User toSignUp(String nickname, String email, String password) {
+        return new User(nickname, email, password);
+    }
     /* todo 닉네임 수정, 비밀번호 수정*/
 
 }
