@@ -1,4 +1,4 @@
-package my.fitlink.global.jwt;
+package my.fitlink.global.security.auth;
 
 import lombok.RequiredArgsConstructor;
 import my.fitlink.domain.user.entity.User;

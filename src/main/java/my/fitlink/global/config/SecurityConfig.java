@@ -1,10 +1,9 @@
 package my.fitlink.global.config;
 
 import lombok.RequiredArgsConstructor;
-import my.fitlink.global.jwt.CustomUserDetails;
-import my.fitlink.global.jwt.CustomUserDetailsService;
-import my.fitlink.global.jwt.JwtAuthenticationFilter;
-import my.fitlink.global.jwt.JwtTokenProvider;
+import my.fitlink.global.security.auth.CustomUserDetailsService;
+import my.fitlink.global.security.auth.JwtAuthenticationFilter;
+import my.fitlink.global.security.auth.JwtTokenProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -37,8 +36,13 @@ public class SecurityConfig {
                                     "/swagger-ui.html",
                                     "/webjars/**"
                             ).permitAll()
-                            .requestMatchers("/api/users", "/api/users/login").permitAll()
+                            .requestMatchers(
+                                    "/api/auth/sign-up",
+                                    "/api/auth/sign-in",
+                                    "/api/auth/reissue").permitAll()
+                            .requestMatchers("/api/auth/test").authenticated()
                             .anyRequest().authenticated();
+
                 })
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
         return http.build();

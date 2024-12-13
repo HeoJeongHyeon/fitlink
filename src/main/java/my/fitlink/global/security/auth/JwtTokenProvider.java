@@ -1,4 +1,4 @@
-package my.fitlink.global.jwt;
+package my.fitlink.global.security.auth;
 
 import io.jsonwebtoken.*;
 import jakarta.annotation.PostConstruct;
@@ -11,6 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import javax.crypto.SecretKey;
 import java.util.Base64;
 import java.util.Date;
 
@@ -20,17 +21,12 @@ import java.util.Date;
 public class JwtTokenProvider {
 
     private final CustomUserDetailsService customUserDetailsService;
+    private final long tokenValidTime = 1000L * 60 * 20;
+    private final long refreshTokenValidTime = 1000L * 60 * 60 * 24 * 7;
+
+
     @Value("${jwt.secret}")
     private String secretkey;
-
-    private final long tokenValidTime = 1000L * 60 * 20;
-
-
-    @PostConstruct
-    protected void init() {
-        // Base64로 인코딩 작업.
-        secretkey = Base64.getEncoder().encodeToString(secretkey.getBytes());
-    }
 
     public String createToken(String email, Role role) {
         Claims claims = Jwts.claims().setSubject(email);
@@ -41,6 +37,18 @@ public class JwtTokenProvider {
                 .setClaims(claims)
                 .setIssuedAt(now)
                 .setExpiration(new Date(now.getTime() + tokenValidTime))
+                .signWith(SignatureAlgorithm.HS256, secretkey)
+                .compact();
+    }
+
+    public String createRefreshToken(String email) {
+        Claims claims = Jwts.claims().setSubject(email);
+        Date now = new Date();
+
+        return Jwts.builder()
+                .setClaims(claims)
+                .setIssuedAt(now)
+                .setExpiration(new Date(now.getTime() + refreshTokenValidTime))
                 .signWith(SignatureAlgorithm.HS256, secretkey)
                 .compact();
     }
