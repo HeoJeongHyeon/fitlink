@@ -40,7 +40,6 @@ public class SecurityConfig {
                                     "/api/auth/sign-up",
                                     "/api/auth/sign-in",
                                     "/api/auth/reissue").permitAll()
-                            .requestMatchers("/api/auth/test").authenticated()
                             .anyRequest().authenticated();
 
                 })

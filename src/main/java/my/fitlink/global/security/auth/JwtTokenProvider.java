@@ -1,7 +1,6 @@
 package my.fitlink.global.security.auth;
 
 import io.jsonwebtoken.*;
-import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import my.fitlink.domain.user.entity.Role;
@@ -11,20 +10,15 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-import javax.crypto.SecretKey;
-import java.util.Base64;
 import java.util.Date;
 
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public class JwtTokenProvider {
-
     private final CustomUserDetailsService customUserDetailsService;
     private final long tokenValidTime = 1000L * 60 * 20;
     private final long refreshTokenValidTime = 1000L * 60 * 60 * 24 * 7;
-
-
     @Value("${jwt.secret}")
     private String secretkey;
 
@@ -83,4 +77,5 @@ public class JwtTokenProvider {
         }
         return false;
     }
+
     }
