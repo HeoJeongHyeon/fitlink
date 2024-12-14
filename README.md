@@ -10,3 +10,12 @@
 
   
 </details>
+
+<details>
+  <summary><h2>기능사항</h2></summary>
+나의 운동 상세 프로필 작성
+
+
+
+  
+</details>
