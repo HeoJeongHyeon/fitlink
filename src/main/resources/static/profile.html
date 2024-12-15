@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FitLink - 프로필 설정</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 2rem auto;
+      padding: 2rem;
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      color: #333;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: #555;
+      font-weight: bold;
+    }
+
+    input[type="number"],
+    input[type="text"],
+    textarea {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 1rem;
+    }
+
+    textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 1rem;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .submit-btn:hover {
+      background-color: #0056b3;
+    }
+
+    .error {
+      color: #dc3545;
+      font-size: 0.875rem;
+      margin-top: 0.25rem;
+    }
+
+    .success-message {
+      background-color: #d4edda;
+      color: #155724;
+      padding: 1rem;
+      border-radius: 4px;
+      margin-bottom: 1rem;
+      display: none;
+    }
+
+    .nav-btn {
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      background-color: #6c757d;
+      color: white;
+      text-decoration: none;
+      border-radius: 4px;
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>프로필 설정</h1>
+  <div id="successMessage" class="success-message">프로필이 성공적으로 저장되었습니다!</div>
+
+  <form id="profileForm">
+    <div class="form-group">
+      <label for="benchPress">벤치 프레스 (kg)</label>
+      <input type="number" id="benchPress" name="benchPress" min="0" required>
+      <div class="error" id="benchPressError"></div>
+    </div>
+
+    <div class="form-group">
+      <label for="squat">스쿼트 (kg)</label>
+      <input type="number" id="squat" name="squat" min="0" required>
+      <div class="error" id="squatError"></div>
+    </div>
+
+    <div class="form-group">
+      <label for="deadLift">데드리프트 (kg)</label>
+      <input type="number" id="deadLift" name="deadLift" min="0" required>
+      <div class="error" id="deadLiftError"></div>
+    </div>
+
+    <div class="form-group">
+      <label for="introduce">자기소개</label>
+      <textarea id="introduce" name="introduce" required></textarea>
+      <div class="error" id="introduceError"></div>
+    </div>
+
+    <div class="form-group">
+      <label for="workoutTime">주요 운동시간</label>
+      <input type="text" id="workoutTime" name="workoutTime" placeholder="예: 평일 저녁 7-9시" required>
+      <div class="error" id="workoutTimeError"></div>
+    </div>
+
+    <button type="submit" class="submit-btn">프로필 저장</button>
+  </form>
+
+  <a href="/main.html" class="nav-btn">메인으로 돌아가기</a>
+</div>
+
+<script>
+  // 인증 체크
+  function checkAuth() {
+    const token = localStorage.getItem('accessToken');
+    if (!token) {
+      window.location.href = '/auth.html';
+      return null;
+    }
+    return token;
+  }
+
+  // 폼 제출 처리
+  document.getElementById('profileForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const token = checkAuth();
+    if (!token) return;
+
+    // 에러 메시지 초기화
+    document.querySelectorAll('.error').forEach(el => el.textContent = '');
+
+    const formData = {
+      benchPress: parseInt(document.getElementById('benchPress').value),
+      squat: parseInt(document.getElementById('squat').value),
+      deadLift: parseInt(document.getElementById('deadLift').value),
+      introduce: document.getElementById('introduce').value,
+      workoutTime: document.getElementById('workoutTime').value
+    };
+
+    try {
+      const response = await fetch('/api/profile/setProfile', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(formData)
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || '프로필 저장에 실패했습니다.');
+      }
+
+      // 성공 메시지 표시
+      const successMessage = document.getElementById('successMessage');
+      successMessage.style.display = 'block';
+
+      // 3초 후 메인 페이지로 이동
+      setTimeout(() => {
+        window.location.href = '/main.html';
+      }, 3000);
+
+    } catch (error) {
+      console.error('프로필 저장 실패:', error);
+
+      // 필드별 에러 메시지 표시
+      if (error.response?.errors) {
+        error.response.errors.forEach(err => {
+          const errorElement = document.getElementById(`${err.field}Error`);
+          if (errorElement) {
+            errorElement.textContent = err.message;
+          }
+        });
+      }
+    }
+  });
+
+  // 페이지 로드 시 인증 체크
+  document.addEventListener('DOMContentLoaded', checkAuth);
+</script>
+</body>
+</html>
