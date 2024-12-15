@@ -4,7 +4,7 @@ public record WorkoutDayRequest (
 
             String workoutType,
             String description
-    ) {
+    ) {}
 
-    }
+
 

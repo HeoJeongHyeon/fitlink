@@ -11,4 +11,12 @@ public class CalendarRequest {
             int month,
             Map<Integer, WorkoutDayRequest> workoutDays
     ) {}
+
+    public record Update(
+            int day,
+            String workoutType,
+            String description
+    ) {
+
+    }
 }

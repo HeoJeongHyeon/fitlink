@@ -59,4 +59,9 @@ public class Calendar {
         );
     }
 
+
+    public void updateWorkoutDay(int day, String workoutType, String description) {
+        WorkoutDay workoutDay = new WorkoutDay(workoutType, description);
+        this.workoutDay.put(day, workoutDay);
+    }
 }

@@ -34,7 +34,7 @@ public class UserLocation extends BaseTime {
     }
 
     /* request 시 사용 DTO -> Entity */
-    public static UserLocation from(UserLocationRequest.create request,User user) {
+    public static UserLocation toUserLocation(UserLocationRequest.create request,User user) {
         return new UserLocation(user, request.dong(), request.latitude(), request.longitude());
     }
 
