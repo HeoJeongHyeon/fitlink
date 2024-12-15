@@ -19,14 +19,22 @@ public class CalendarController {
 
     @PostMapping("/add")
     public ResponseEntity<CalendarResponse.CalendarInfo> addCalendar(@RequestBody CalendarRequest.Create request) {
-
         return ResponseEntity.ok()
                 .body(calendarService.addCalendar(request));
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<CalendarResponse.WorkoutDayInfo> updateCalendar(@RequestBody CalendarRequest.Update request) {
+        return ResponseEntity.ok()
+                .body(
+                        calendarService.updateCalendar(request)
+                );
     }
 
 
     @GetMapping()
     public ResponseEntity<CalendarResponse.CalendarInfo> getCalendar() {
+
         return ResponseEntity.ok()
                 .body(calendarService.getCalendar());
     }

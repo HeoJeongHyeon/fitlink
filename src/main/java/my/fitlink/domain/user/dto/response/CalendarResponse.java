@@ -1,5 +1,6 @@
 package my.fitlink.domain.user.dto.response;
 
+import my.fitlink.domain.user.dto.request.CalendarRequest;
 import my.fitlink.domain.user.entity.Calendar;
 import my.fitlink.domain.user.entity.User;
 import my.fitlink.domain.user.entity.WorkoutDay;
@@ -28,5 +29,15 @@ public class CalendarResponse {
             );
         }
 
+    }
+
+    public record WorkoutDayInfo(
+            int day,
+            String wokoutType,
+            String description
+    ) {
+        public static WorkoutDayInfo from(CalendarRequest.Update request) {
+            return new WorkoutDayInfo(request.day(), request.workoutType(), request.description());
+        }
     }
 }
