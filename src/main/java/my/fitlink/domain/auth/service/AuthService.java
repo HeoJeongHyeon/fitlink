@@ -12,7 +12,6 @@ import my.fitlink.domain.user.dto.response.UserResponse;
 import my.fitlink.domain.user.entity.User;
 import my.fitlink.domain.user.repository.UserRepository;
 import my.fitlink.global.security.auth.JwtTokenProvider;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 

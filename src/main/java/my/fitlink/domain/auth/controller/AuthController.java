@@ -2,7 +2,6 @@ package my.fitlink.domain.auth.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import my.fitlink.domain.auth.dto.TokenRequest;
@@ -10,8 +9,6 @@ import my.fitlink.domain.auth.dto.TokenResponse;
 import my.fitlink.domain.auth.service.AuthService;
 import my.fitlink.domain.user.dto.request.UserRequest;
 import my.fitlink.domain.user.dto.response.UserResponse;
-import my.fitlink.domain.user.service.UserService;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

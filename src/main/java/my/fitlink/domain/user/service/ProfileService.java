@@ -9,7 +9,6 @@ import my.fitlink.domain.user.entity.User;
 import my.fitlink.domain.user.repository.ProfileRepository;
 import my.fitlink.domain.user.repository.UserRepository;
 import my.fitlink.global.util.SecurityUtil;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
